@@ -124,7 +124,9 @@ class EventsView {
         <td class="event-end" >${newEvent.endDate}</td>
         <td>
             <div class="action-buttons">
-                <button class="edit-button">Edit</button>
+                <button class="edit-button">
+                    Edit
+                </button>
                 <button class="delete-button">Delete</button>
             </div>
         </td>
