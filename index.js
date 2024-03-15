@@ -27,11 +27,29 @@ const eventsAPIs = (function () {
             }).then((res) => res.json());
     }
 
+    // Get a single event by id
+    async function getEventById(id) {
+        return fetch(`${API_URL}/${id}`).then((res) => res.json());
+    }    
+
+    // Edit an event by id
+    async function editEvent(id, updatedEvent) {
+        return fetch(`${API_URL}/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updatedEvent)
+            }).then((res) => res.json());
+    }
+
     // return the functions that can be used outside of this module
     return {
         getEvents,
         addEvent,
         deleteEvent,
+        getEventById,
+        editEvent,
     };
 })();
 
@@ -67,6 +85,21 @@ class EventsView {
         this.eventBody.removeChild(eventRow);
     }
 
+    // Edit the event, replace the event row with input fields
+    editRow(eventRow, event, onSave) {
+        eventRow.innerHTML = `
+            <td><input type="text" class="event-name" value="${event.eventName}" /></td>
+            <td><input type="date" class="event-start" value="${event.startDate}" /></td>
+            <td><input type="date" class="event-end" value="${event.endDate}" /></td>
+            <td>
+                <div class="action-buttons">
+                    <button class="confirm-edit-button">Confirm</button>
+                    <button class="cancel-edit-button">Cancel</button>
+                </div>
+            </td>
+        `;
+
+    }
 
     // Display the events
     renderEvents(events) {
@@ -122,6 +155,7 @@ class EventsController {
 
     setUpEvents() {
         this.setUpDeleteEvent();
+        this.setUpEditEvent();
     }
 
     // Fetches the event items using eventsAPIs.getEvents() 
@@ -198,6 +232,54 @@ class EventsController {
             }
         });
     }
+
+
+    setUpEditEvent() {
+        this.view.eventBody.addEventListener("click", async (e) => {
+            const elem = e.target;
+
+            if (elem.classList.contains("edit-button")) {
+                const eventRow = elem.parentElement.parentElement.parentElement;
+                const eventId = eventRow.id;
+
+                const event = await eventsAPIs.getEventById(eventId);
+                this.view.editRow(eventRow, event);
+                this.setUpEditConfirmButtons(eventRow, eventId);
+            }
+        });
+    }
+
+    setUpEditConfirmButtons(eventRow, eventId) {
+        const confirmButton = eventRow.querySelector('.confirm-edit-button');
+        const cancelButton = eventRow.querySelector('.cancel-edit-button');
+    
+        confirmButton.addEventListener('click', async () => {
+            const eventNameInput = eventRow.querySelector('.event-name').value;
+            const startDateInput = eventRow.querySelector('.event-start').value;
+            const endDateInput = eventRow.querySelector('.event-end').value;
+    
+            if (!this.validateInput(eventNameInput, startDateInput, endDateInput)) {
+                return;
+            }
+    
+            const updatedEvent = {
+                eventName: eventNameInput,
+                startDate: startDateInput,
+                endDate: endDateInput
+            };
+    
+            await eventsAPIs.editEvent(eventId, updatedEvent);
+            // After updating, fetch and display the updated events list
+            await this.fetchEvents();
+        });
+    
+        // cancel button
+        cancelButton.addEventListener('click', async () => {
+            // Re-fetch and display the events to cancel editing
+            await this.fetchEvents();
+        });
+    }
+    
 
 }
 
