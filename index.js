@@ -62,6 +62,11 @@ class EventsView {
         });
     }
 
+    // Remove the event row from the table
+    removeEventRow(eventRow) {
+        this.eventBody.removeChild(eventRow);
+    }
+
 
     // Display the events
     renderEvents(events) {
@@ -111,8 +116,13 @@ class EventsController {
 
     init() {
         this.fetchEvents();
+        this.setUpEvents();
+
     }
 
+    setUpEvents() {
+        this.setUpDeleteEvent();
+    }
 
     // Fetches the event items using eventsAPIs.getEvents() 
     // and then renders them using the view
@@ -146,6 +156,21 @@ class EventsController {
     async addEvent(newEvent) {
         const addedEvent = await eventsAPIs.addEvent(newEvent);
         this.view.renderNewEvent(addedEvent);
+    }
+
+    setUpDeleteEvent() {
+        this.view.eventBody.addEventListener("click", async (e) => {
+            const elem = e.target;
+
+            if (elem.classList.contains("delete-button")) {
+                // Let the element find the ".event-row" class
+                const eventRow = elem.parentElement.parentElement.parentElement;
+                const eventId = eventRow.id;
+
+                await eventsAPIs.deleteEvent(eventId);
+                this.view.removeEventRow(eventRow);
+            }
+        });
     }
 
 }
