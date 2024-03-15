@@ -138,6 +138,12 @@ class EventsController {
             const eventNameInput = row.querySelector('.event-name');
             const startDateInput = row.querySelector('.event-start');
             const endDateInput = row.querySelector('.event-end');
+
+            // Call validateInput() to check if the input is valid
+            if (!this.validateInput(eventNameInput.value, startDateInput.value, endDateInput.value)) {
+                return;
+            }
+
             const newEvent = {
                 eventName: eventNameInput.value,
                 startDate: startDateInput.value,
@@ -150,6 +156,26 @@ class EventsController {
         row.querySelector('.cancel-button').addEventListener('click', () => {
             row.remove(); // Remove the input row on cancel
         });
+    }
+
+    // Check if the input is valid
+    validateInput(eventNameInput, startDateInput, endDateInput) {
+        // Check if the input is empty
+        if (!eventNameInput.trim()) {
+            alert('Input not valid: Event name is required');
+            return false;
+        }
+
+        // Check if the start date is before the end date
+        const start = new Date(startDateInput);
+        const end = new Date(endDateInput);
+
+        if (start >= end) {
+            alert('Input not valid: End date should be after start date');
+            return false; 
+        }
+
+        return true; 
     }
 
     // If the confirm button is clicked, add the new event to the table

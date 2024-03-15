@@ -9,3 +9,50 @@ body {
     background-color: #f8f8f8;
     color: #333;
 }
+
+.container {
+    width: 80%;
+    margin: auto;
+    max-width: 1200px;
+    margin-top: 20px;
+}
+
+.header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+
+/* Table */
+.event-table {
+    display: flex;
+    justify-content: center;
+}
+table {
+    width: 100%; 
+}
+table, th, td {
+    border: 1px solid #ddd;
+  }
+th, td {
+    text-align: center;
+    padding: 8px;
+}
+th {
+    background-color: #f8f8f8;
+}
+/* .action-buttons {
+    display: flex;
+    gap: 2px;
+}
+
+.icon-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+.icon-button img {
+    width: 16px;
+    height: 16px;
+} */
