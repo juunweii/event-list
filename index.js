@@ -226,7 +226,7 @@ class EventsController {
         const start = new Date(startDateInput);
         const end = new Date(endDateInput);
 
-        if (start >= end) {
+        if (start > end) {
             alert('Input not valid: End date should be after start date');
             return false; 
         }
@@ -266,12 +266,12 @@ class EventsController {
 
                 const event = await eventsAPIs.getEventById(eventId);
                 this.view.editRow(eventRow, event);
-                this.setUpEditConfirmButtons(eventRow, eventId);
+                this.setUpEditConfirmButtons(eventRow, eventId, event);
             }
         });
     }
 
-    setUpEditConfirmButtons(eventRow, eventId) {
+    setUpEditConfirmButtons(eventRow, eventId, event) {
         const confirmButton = eventRow.querySelector('.confirm-edit-button');
         const cancelButton = eventRow.querySelector('.cancel-edit-button');
     
@@ -279,7 +279,6 @@ class EventsController {
             const eventNameInput = eventRow.querySelector('.event-name').value;
             const startDateInput = eventRow.querySelector('.event-start').value;
             const endDateInput = eventRow.querySelector('.event-end').value;
-    
             if (!this.validateInput(eventNameInput, startDateInput, endDateInput)) {
                 return;
             }
@@ -292,13 +291,28 @@ class EventsController {
     
             await eventsAPIs.editEvent(eventId, updatedEvent);
             // After updating, fetch and display the updated events list
-            await this.fetchEvents();
+            // await this.fetchEvents();
+
+
+            // To implement multi-row editing:
+            // Instead of fetching all the events again, we can just update the event row
+
+            // Create a new row with the updated event and the same id
+            // Spread operator is used to copy the properties of the updated event to a new object
+            const updatedRow = this.view.createEventElement({...updatedEvent, id: eventId});
+            // Replace the old row with the updated row
+            eventRow.parentNode.replaceChild(updatedRow, eventRow);
         });
     
         // cancel button
         cancelButton.addEventListener('click', async () => {
             // Re-fetch and display the events to cancel editing
-            await this.fetchEvents();
+            // await this.fetchEvents();
+
+            // Multi-row editing & cancel implementation
+            const originalRow = this.view.createEventElement(event);
+            // Replace the updated row with the original row
+            eventRow.parentNode.replaceChild(originalRow, eventRow);
         });
     }
     
