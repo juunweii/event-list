@@ -36,23 +36,42 @@ body {
 .event-table {
     display: flex;
     justify-content: center;
+    border: 3px solid #e6e2d3;
+    border-radius: 8px;
+    background-color: #ffffff;
 }
 table {
-    width: 100%; 
+    width: 90%;
+    margin: auto; 
+    margin-top: 20px;
+    margin-bottom: 20px;
+    /* Add the horizontal row gap */
+    border-collapse: separate; 
+    border-spacing: 0 12px;
 }
-table, th, td {
-    border: 1.5px solid #e6e2d3;
-  }
+
+th {
+    font-size: 1.4rem;
+}
+
 th, td {
     text-align: center;
-    padding: 8px;
+    padding: 10px;
 }
+
 th {
     background-color: #ffffff;
 }
+
 td {
     background-color: #e6e2d3;
-    margin-bottom: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
 .action-buttons button {
@@ -62,34 +81,38 @@ td {
     padding: 5px 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
+    width: 45px;
+    height: 30px;
 }
 
-.edit-button {
+svg {
+    pointer-events: none; /* Let user can click on svg  */
+    fill: currentColor;
+    width: 20px;
+    height: 20px;
+    color: white;
+}
+
+.edit-button, .confirm-button, .confirm-edit-button  {
     background-color: #008cba;
-    color: white;
 }
 
-.delete-button {
+.delete-button, .cancel-button, .cancel-edit-button {
     background-color: #c94c4c;
-    color: white;
 }
 
-.confirm-button {
+/* .confirm-button {
     background-color: #008cba;
-    color: white;
-}
+} */
 
-.cancel-button {
+/* .cancel-button {
     background-color: #c94c4c;
-    color: white;
-}
+} */
 
-.confirm-edit-button {
+/* .confirm-edit-button {
     background-color: #008cba;
-    color: white;
-}
+} */
 
-.cancel-edit-button {
+/* .cancel-edit-button {
     background-color: #c94c4c;
-    color: white;
-}
+} */
